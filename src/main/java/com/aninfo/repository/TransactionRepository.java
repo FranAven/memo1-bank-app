@@ -1,6 +1,5 @@
 package com.aninfo.repository;
 
-import com.aninfo.model.Account;
 import java.util.List;
 
 import com.aninfo.model.Transaction;

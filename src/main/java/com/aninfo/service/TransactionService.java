@@ -1,5 +1,8 @@
 package com.aninfo.service;
 
+import com.aninfo.exceptions.DepositNegativeSumException;
+import com.aninfo.model.Deposit;
+import com.aninfo.model.Extraction;
 import com.aninfo.model.Transaction;
 import com.aninfo.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +17,15 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public Transaction createTransaction(Transaction transaction){
-        return transactionRepository.save(transaction);
+    public Transaction createDeposit(Deposit deposit){
+        if(deposit.getAmount() <= 0){
+            throw new DepositNegativeSumException("Cannot deposit negative sums");
+        }
+        return transactionRepository.save(deposit);
+    }
+
+    public Transaction createExtraction(Extraction extraction){
+        return transactionRepository.save(extraction);
     }
 
     public Optional<Transaction> findById(Long id){
