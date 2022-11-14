@@ -6,12 +6,15 @@ import javax.persistence.*;
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long accountCbu;
-    private Double amount;
+    private Double amount = 0.0;
     private String transactionType;
+
+    public Transaction(){
+    }
 
     public Transaction(Long accountCbu, Double amount, String transactionType){
         this.amount = amount;
@@ -29,5 +32,9 @@ public class Transaction {
 
     public Long getId(){
         return this.id;
+    }
+
+    public String getTransactionType(){
+        return this.transactionType;
     }
 }

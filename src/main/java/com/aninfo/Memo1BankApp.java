@@ -91,7 +91,7 @@ public class Memo1BankApp {
 	}
 
 	@GetMapping("/accounts/transactions")
-	public Collection<Transaction> getTransactionsByAccountCbu(@PathVariable Long cbu) {
+	public Collection<Transaction> getTransactionsByAccountCbu(@RequestParam Long cbu) {
 		Collection<Transaction> transactions = transactionService.getTransactionsByAccountCbu(cbu);
 		return transactions;
 	}

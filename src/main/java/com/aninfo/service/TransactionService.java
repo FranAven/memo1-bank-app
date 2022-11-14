@@ -15,12 +15,18 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     public Transaction createDeposit(Long cbu, Double sum){
-        Transaction transaction = new Transaction(cbu, sum, "Extraction");
+        if (sum >= 2000){
+            if (sum*0.1 <= 500)
+                sum = sum*1.1;
+            else
+                sum = sum+500;
+        }
+        Transaction transaction = new Transaction(cbu, sum, "Deposit");
         return transactionRepository.save(transaction);
     }
 
     public Transaction createExtraction(Long cbu, Double sum){
-        Transaction transaction = new Transaction(cbu, sum, "Deposit");
+        Transaction transaction = new Transaction(cbu, sum, "Extraction");
         return transactionRepository.save(transaction);
     }
 
