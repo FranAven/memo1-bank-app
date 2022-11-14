@@ -1,7 +1,9 @@
 package com.aninfo;
 
 import com.aninfo.model.Account;
+import com.aninfo.model.Transaction;
 import com.aninfo.service.AccountService;
+import com.aninfo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -26,6 +29,9 @@ public class Memo1BankApp {
 
 	@Autowired
 	private AccountService accountService;
+
+	@Autowired
+	private TransactionService transactionService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Memo1BankApp.class, args);
@@ -66,14 +72,36 @@ public class Memo1BankApp {
 	}
 
 	@PutMapping("/accounts/{cbu}/withdraw")
-	public Account withdraw(@PathVariable Long cbu, @RequestParam Double sum) {
-		return accountService.withdraw(cbu, sum);
+	public Transaction withdraw(@PathVariable Long cbu, @RequestParam Double sum) {
+		accountService.withdraw(cbu, sum);
+		return transactionService.createExtraction(cbu, sum);
 	}
 
 	@PutMapping("/accounts/{cbu}/deposit")
-	public Account deposit(@PathVariable Long cbu, @RequestParam Double sum) {
-		return accountService.deposit(cbu, sum);
+	public Transaction deposit(@PathVariable Long cbu, @RequestParam Double sum) {
+		accountService.deposit(cbu, sum);
+		return transactionService.createDeposit(cbu, sum);
 	}
+
+
+	@GetMapping("/transactions/{id}")
+	public ResponseEntity<Transaction> getTransaction(@PathVariable Long id) {
+		Optional<Transaction> transactionOptional = transactionService.findTransactionById(id);
+		return ResponseEntity.of(transactionOptional);
+	}
+
+	@GetMapping("/accounts/transactions")
+	public Collection<Transaction> getTransactionsByAccountCbu(@PathVariable Long cbu) {
+		Collection<Transaction> transactions = transactionService.getTransactionsByAccountCbu(cbu);
+		return transactions;
+	}
+
+	@DeleteMapping("/transactions/{id}")
+	public void deleteTransaction(@PathVariable Long id) {
+		transactionService.deleteTransactionById(id);
+	}
+
+
 
 	@Bean
 	public Docket apiDocket() {

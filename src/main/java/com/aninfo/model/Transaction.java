@@ -1,15 +1,27 @@
 package com.aninfo.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-public abstract class Transaction {
+@Entity
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long id;
-    protected Long accountCbu;
+    private Long id;
+
+    private Long accountCbu;
+    private Double amount;
+    private String transactionType;
+
+    public Transaction(Long accountCbu, Double amount, String transactionType){
+        this.amount = amount;
+        this.accountCbu = accountCbu;
+        this.transactionType = transactionType;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
 
     public Long getAccountCbu(){
         return this.accountCbu;
